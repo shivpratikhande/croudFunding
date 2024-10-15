@@ -62,5 +62,16 @@ contract CroudFunding {
         return ( campaigns[_id].donators, campaigns[_id].donations);
     }
 
+    function getCampaigns() public view returns (Campaign[] memory){
+        Campaign[] memory allCampaigns = new Campaign[](numberOfCampaign);
+
+        for(uint i = 0; i< numberOfCampaign; i++){
+            Campaign storage item = campaigns[i];
+
+            allCampaigns[i]= item;
+        }
+        return allCampaigns;
+    }
 
 }
+ 
