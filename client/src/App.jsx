@@ -7,6 +7,17 @@ import CreateCampaign from './pages/CreateCampaign';
 import CampaignDetails from './pages/CampaignDetails';
 import { Route, Routes } from 'react-router-dom';
 
+
+/* export const client = createThirdwebClient({
+  clientId: "9bcf5d2f319d5a16711a992331b89f67"
+}); */
+
+/* export const contract = getContract({
+  client,
+  chain: defineChain(11155111),
+  address: "0x3AD6a6061397D2944Ff232817047847D87fd6B4a"
+});
+ */
 function App() {
   return (
     <div className="relative sm:-8 p-4 bg-[#13131a] min-h-screen flex flex-row">

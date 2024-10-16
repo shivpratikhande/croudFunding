@@ -9,7 +9,7 @@ import { ThirdwebProvider } from '@thirdweb-dev/react'
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <StrictMode>
-      <ThirdwebProvider desiredChainId={"WezQWIiwvleMQ7Y_nMrrRkvcknu8dOtLYrq8AeI9zsqeAmcQDXazJ17POecRqj1mQSQLKK2bdTUsN47YVNw5BQ"}>
+      <ThirdwebProvider >
         <StateContextProvider>
           <App />
         </StateContextProvider>

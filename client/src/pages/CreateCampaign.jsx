@@ -1,18 +1,16 @@
-import React, { useState } from 'react'
-import { ethers, utils } from 'ethers'
-
-import { createCampaign, money } from '../assets'
-import { checkIfImage } from "../utils"
-import { useNavigate } from 'react-router-dom'
-import FormField from '../component/FormField'
-import CustomButton from '../component/CustomButton'
-import { useStateContext } from '../context'
+import React, { useState } from 'react';
+import { ethers } from 'ethers';
+import { money } from '../assets';
+import { checkIfImage } from "../utils";
+import { useNavigate } from 'react-router-dom';
+import FormField from '../component/FormField';
+import CustomButton from '../component/CustomButton';
+import { useStateContext } from '../context';
 
 function CreateCampaign() {
-
-  const { CreateCampaign } = useStateContext()
-  const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(false)
+  const { createCampaign } = useStateContext();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     title: "",
@@ -20,50 +18,45 @@ function CreateCampaign() {
     target: "",
     deadline: "",
     image: ""
-  })
-
+  });
 
   const handleFormFieldChange = (fieldName, e) => {
-    setForm({ ...form, [fieldName]: e.target.value })
-  }
+    setForm({ ...form, [fieldName]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log('createCampaign function:', createCampaign);
+
     checkIfImage(form.image, async (exists) => {
       if (exists) {
-        setIsLoading(true)
-        await createCampaign({ ...form, target: ethers.utils.parseUnits(form.target, 18) })
-        setIsLoading(false);
-        navigate('/');
+        setIsLoading(true);
+        try {
+          await createCampaign({ 
+            ...form, 
+            target: ethers.utils.parseUnits(form.target, 18) 
+          });
+          navigate('/');
+        } catch (error) {
+          console.error("Error creating campaign:", error);
+        } finally {
+          setIsLoading(false);
+        }
       } else {
-        alert('Provide valid image URL')
+        alert('Provide valid image URL');
         setForm({ ...form, image: '' });
       }
-    })
+    });
 
-
-    console.log(form)
-
-    /* checkIfImage(form.image, async (exists) => {
-      if (exists) {
-        setIsLoading(true)
-        await createCampaign({ ...form, target: ethers.utils.parseUnits(form.target, 18) })
-        setIsLoading(false);
-        navigate('/');
-      } else {
-        alert('Provide valid image URL')
-        setForm({ ...form, image: '' });
-      }
-    }) */
-  }
-
+    console.log(form);
+  };
 
   return (
-    <div className=' bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4'>
-      {isLoading && "loader..."}
-      <div className=' flex justify-center items-center flex-col rounded-[10px]'>
-        <h1 className=' font-epilogue font-bold sm:text-[25px] text-[18px]  leading-[38px] text-white'> Start a Campaign</h1>
+    <div className='bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4'>
+      {isLoading && "Loading..."}
+      <div className='flex justify-center items-center flex-col rounded-[10px]'>
+        <h1 className='font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-white'>Start a Campaign</h1>
       </div>
       <form onSubmit={handleSubmit} className="w-full mt-[65px] flex flex-col gap-[30px]">
         <div className="flex flex-wrap gap-[40px]">
@@ -129,10 +122,8 @@ function CreateCampaign() {
           />
         </div>
       </form>
-
-
     </div>
-  )
+  );
 }
 
-export default CreateCampaign
+export default CreateCampaign;
