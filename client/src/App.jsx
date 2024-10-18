@@ -6,6 +6,7 @@ import Profile from './pages/Profile';
 import CreateCampaign from './pages/CreateCampaign';
 import CampaignDetails from './pages/CampaignDetails';
 import { Route, Routes } from 'react-router-dom';
+import { ConnectWallet } from '@thirdweb-dev/react';
 
 
 /* export const client = createThirdwebClient({
@@ -32,6 +33,7 @@ function App() {
           <Route path="/create-campaign" element={<CreateCampaign />} />
           <Route path="/campaign-details/:id" element={<CampaignDetails />} />
         </Routes>
+        <ConnectWallet/>
       </div>
     </div>
   );
