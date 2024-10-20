@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useStateContext } from '../context/index'; // Adjust the import according to your file structure
+import { checkIfImage } from '../utils'; // Make sure this utility is correctly imported
+import { ethers } from 'ethers';
+import { useNavigate } from 'react-router-dom';
 
 const CreateCampaignForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { createCampaign, connectWallet } = useStateContext();
   const [form, setForm] = useState({
     title: '',
@@ -10,14 +14,37 @@ const CreateCampaignForm = () => {
     deadline: '',
     image: '',
   });
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleCreateCampaign = async () => {
-    await connectWallet(); // Connect to MetaMask
-    await createCampaign(form); // Call createCampaign with the form data
+    try {
+      await connectWallet(); // Ensure the wallet is connected before proceeding
+
+      checkIfImage(form.image, async (exists) => {
+        if (exists) {
+          setIsLoading(true);
+          try {
+            await createCampaign(form);
+            navigate('/'); // Replace with your desired path after successful creation
+          } catch (error) {
+            console.error('Error creating campaign:', error);
+            alert('Error creating campaign. Please try again.');
+          } finally {
+            setIsLoading(false);
+          }
+        } else {
+          alert('Provide a valid image URL');
+          setForm({ ...form, image: '' });
+        }
+      });
+    } catch (error) {
+      console.error('Wallet connection failed:', error);
+      alert('Failed to connect wallet. Please try again.');
+    }
   };
 
   return (
@@ -65,9 +92,12 @@ const CreateCampaignForm = () => {
       />
       <button
         onClick={handleCreateCampaign}
-        className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition duration-200"
+        disabled={isLoading}
+        className={`w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition duration-200 ${
+          isLoading ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
       >
-        Create Campaign
+        {isLoading ? 'Creating...' : 'Create Campaign'}
       </button>
     </div>
   );
