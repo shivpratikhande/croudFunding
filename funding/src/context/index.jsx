@@ -321,6 +321,8 @@ export const StateContextProvider = ({ children }) => {
         getCampaigns,
         provider,
         signer,
+        contractAddress,
+        contract,
       }}
     >
       {children}

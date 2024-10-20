@@ -11,6 +11,7 @@ const CreateCampaignForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { createCampaign, connectWallet } = useStateContext();
   const [form, setForm] = useState({
+    name: '',
     title: '',
     description: '',
     target: '',
@@ -19,8 +20,8 @@ const CreateCampaignForm = () => {
   });
   const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleFormFieldChange = (fieldName,e) => {
+    setForm({ ...form, [fieldName]: e.target.value });
   };
 
   const handleCreateCampaign = async () => {
