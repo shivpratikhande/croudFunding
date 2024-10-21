@@ -313,12 +313,61 @@ export const StateContextProvider = ({ children }) => {
     }
   };
 
+  const donate = async (campaignId, donationAmount) => {
+    try {
+      // Connect to the Ethereum provider
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+  
+    /*   // Define the contract address and ABI
+      const contractAddress = "YOUR_CONTRACT_ADDRESS";
+      const contract = new ethers.Contract(contractAddress, contractABI, signer); */
+  
+      // Convert donation amount to wei (1 ETH = 10^18 wei)
+      const donationAmountInWei = ethers.utils.parseEther(donationAmount.toString());
+  
+      // Call the `donateCampaign` function with the specified campaign ID
+      const tx = await contract.donateCampaign(campaignId, {
+        value: donationAmountInWei, // Send the donation amount with the transaction
+      });
+  
+      // Wait for the transaction to be mined
+      await tx.wait();
+      console.log('Donation successful!', tx);
+    } catch (error) {
+      console.error('Error donating to the campaign:', error);
+    }
+  };
+
+  const getDonations = async (campaignId) => {
+    try {
+      // Connect to the Ethereum provider
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+  
+     /*  // Define the contract address and ABI
+      const contractAddress = "YOUR_CONTRACT_ADDRESS";
+      const contract = new ethers.Contract(contractAddress, contractABI, signer);
+   */
+      // Call the `getDonators` function
+      const [donators, donations] = await contract.getDonators(campaignId);
+  
+      // Display the list of donators and their respective donations
+      console.log('Donators:', donators);
+      console.log('Donations:', donations.map(ethers.utils.formatEther)); // Convert donations from wei to ETH for easier readability
+    } catch (error) {
+      console.error('Error retrieving donators:', error);
+    }
+  };
+
   return (
     <StateContext.Provider
       value={{
         connectWallet,
         createCampaign,
         getCampaigns,
+        donate,
+        getDonations,
         provider,
         signer,
         contractAddress,

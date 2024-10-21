@@ -24,7 +24,8 @@ const CreateCampaignForm = () => {
     setForm({ ...form, [fieldName]: e.target.value });
   };
 
-  const handleCreateCampaign = async () => {
+  const handleCreateCampaign = async (e) => {
+    e.preventDefault();
     try {
       await connectWallet(); // Ensure the wallet is connected before proceeding
 
@@ -116,7 +117,7 @@ const CreateCampaignForm = () => {
         <div className="flex justify-center items-center mt-[40px]">
           <CustomButton
             btnType="submit"
-            title="Submit new campaign"
+            title="Submit new campaign "
             styles="bg-[#1dc071]"
           />
         </div>
